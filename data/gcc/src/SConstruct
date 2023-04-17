@@ -1,0 +1,23 @@
+from os import environ
+from os.path import dirname
+
+env = Environment(
+    CC=environ.get('CC', 'gcc'),
+    CCFLAGS=environ.get('CFLAGS', '').split(),
+    CPPDEFINES={'alloca': '_alloca'},
+    CPPFLAGS='$preincludeflags',
+    preincludes=['stdio.h', 'string.h'],
+    preincludeflagprefix='-include ',
+    preincludeflagsuffix='',
+    preincludeflags='${_concat(preincludeflagprefix, preincludes, preincludeflagsuffix, __env__)}',
+    ENV=environ.copy(),
+    )
+
+[thisfile] = GetOption('file')
+sourcedir = dirname(thisfile)
+VariantDir('.', sourcedir, duplicate=False)
+
+sources = sorted(Glob('*.c'), key=str)
+executable = env.Program('gcc', sources)
+Default(executable)
+
