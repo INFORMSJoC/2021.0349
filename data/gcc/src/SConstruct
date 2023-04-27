@@ -13,9 +13,9 @@ env = Environment(
     ENV=environ.copy(),
     )
 
-[thisfile] = GetOption('file')
-sourcedir = dirname(thisfile)
-VariantDir('.', sourcedir, duplicate=False)
+# [thisfile] = GetOption('file')
+# sourcedir = dirname(thisfile)
+# VariantDir('.', sourcedir, duplicate=False)
 
 sources = sorted(Glob('*.c'), key=str)
 executable = env.Program('gcc', sources)
