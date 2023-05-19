@@ -3,7 +3,7 @@ CSI Release License
 -------------------
 Apache License, Version 2.0
 
-Copyright (c) 2023 Carla Michini, Peter Ohmann, Ben Liblit, and Jeff Linderoth
+Copyright (c) 2023 Peter J. Ohmann and Benjamin R. Liblit
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -28,4 +28,4 @@ Portions of the software are derived from the LLVM Compiler Infrastructure
 License.  Source files impacted by this copyright state this at the top of the
 file.
 
-Please see src/UI_LICENSE.txt for license details.
+Please see UI_LICENSE.txt for license details.
