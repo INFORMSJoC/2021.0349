@@ -24,43 +24,41 @@ https://doi.org/10.1287/ijoc.2019.0000
 
 https://doi.org/10.1287/ijoc.2019.0000.cd
 
-Below is the BibTex for citing this snapshot of the respoitory.
+Below is the BibTex for citing this snapshot of the repository
 
 ```
 @article{CacheTest,
-  author =        {T. Ralphs},
+  author =        {Carla Michini and Peter Ohmann and Ben Liblit and Jeff Linderoth},
   publisher =     {INFORMS Journal on Computing},
-  title =         {{CacheTest}},
-  year =          {2020},
-  doi =           {10.1287/ijoc.2019.0000.cd},
-  url =           {https://github.com/INFORMSJoC/2019.0000},
+  title =         {{A Set Covering Approach to
+Customized Coverage Instrumentation}},
+  year =          {2022},
+  doi =           {10.1287/ijoc.2021.0349.cd},
+  url =           {https://github.com/INFORMSJoC/2021.0349},
 }  
 ```
 
 ## Description
 
-The goal of this software is to demonstrate the effect of cache optimization.
+This software is an instrumenting compiler for lightweight, customizable control-flow tracing.  The compiler has embedded within it calls to the mixed-integer programming package Gurobi to implement the cutting plane method as described in the paper.
 
 ## Building
 
-In Linux, to build the version that multiplies all elements of a vector by a
-constant (used to obtain the results in [Figure 1](results/mult-test.png) in the
-paper), stepping K elements at a time, execute the following commands.
-
+First, one needs to build the csi-cc compiler.  Entering the src directory and typing 
 ```
-make mult
+scons
 ```
+should build the compiler, assuming all necessary dependencies are installed.  
 
-Alternatively, to build the version that sums the elements of a vector (used
-to obtain the results [Figure 2](results/sum-test.png) in the paper), stepping K
-elements at a time, do the following.
+* scons
+* llvm 
+* clang 
+* pkg-config 
+* libopt-dev 
 
-```
-make clean
-make sum
-```
+(This should make in src a Release directory) with the executable/compiler csi-cc and associated library libCSI.so
 
-Be sure to make clean before building a different version of the code.
+
 
 ## Results
 
