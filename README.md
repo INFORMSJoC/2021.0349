@@ -20,9 +20,9 @@ get a more recent version.**
 
 To cite the contents of this repository, please cite both the paper and this repo, using their respective DOIs.
 
-https://doi.org/10.1287/ijoc.2019.0000
+https://doi.org/10.1287/ijoc.2021.0349
 
-https://doi.org/10.1287/ijoc.2019.0000.cd
+https://doi.org/10.1287/ijoc.2019.0349.cd
 
 Below is the BibTex for citing this snapshot of the repository
 
@@ -44,61 +44,53 @@ This software is an instrumenting compiler for lightweight, customizable control
 
 ## Building
 
-First, one needs to build the csi-cc compiler.  Entering the src directory and typing 
+This is a large software infrastructure, so building and testing is a somewhat laborious process.
+
+
+First, one needs to build the csi-cc compiler, which is based on the [llvm compiler infrastructure](https://llvm.org/).  To ensure that assertions are active and to get debug/print support, the user will need to build the tools from source using appropriate compiler flags. 
+
+### Building LLVM 
+
+In the scripts subdirectory, we have provided a "build-llvm" script that downloads and builds clang CFE internals (cfe), the compielr runtime (compiler-rt), and llvm.
+
+
+### Building csi-cc
+
+Building csi-cc with the integer-programming based optimal program instrumentation requires both the LEMON and Gurobi to be installed. 
+
+(Jeff doesn't see how/where to )
+
 ```
 scons
 ```
-should build the compiler, assuming all necessary dependencies are installed.  
+should build the compiler, assuming all necessary dependencies are installed.   Dependencies may include the following:
 
-* scons
-* llvm 
-* clang 
-* pkg-config 
-* libopt-dev 
+```
+scons LLVM_CONFIG=??? (What is this)  LEMONDIR=/path/to/lemon GUROBIDIR=/path/to/gurobi
+```
 
-(This should make in src a Release directory) with the executable/compiler csi-cc and associated library libCSI.so
+
+(This should make in src a Release directory with the executable/compiler csi-cc and associated library libCSI.so)
 
 
 
 ## Results
 
-Figure 1 in the paper shows the results of the multiplication test with different
-values of K using `gcc` 7.5 on an Ubuntu Linux box.
+In the results directory, we put the log output from running compilation of a variety of test instances. 
 
-![Figure 1](results/mult-test.png)
+Most of the test instances can be obtained from (site where Peter told Jeff)
 
-Figure 2 in the paper shows the results of the sum test with different
-values of K using `gcc` 7.5 on an Ubuntu Linux box.
+Other applications are given in the data directory 
 
-![Figure 1](results/sum-test.png)
 
 ## Replicating
 
-To replicate the results in [Figure 1](results/mult-test), do either
+Replicating all of the results will be incredibly time consuming, 
+The figures can be created by running the scripts XXX
 
-```
-make mult-test
-```
-or
-```
-python test.py mult
-```
-To replicate the results in [Figure 2](results/sum-test), do either
-
-```
-make sum-test
-```
-or
-```
-python test.py sum
-```
 
 ## Ongoing Development
 
-This code is being developed on an on-going basis at the author's
-[Github site](https://github.com/tkralphs/JoCTemplate).
-
-## Support
-
-For support in using this software, submit an
-[issue](https://github.com/tkralphs/JoCTemplate/issues/new).
+This code is being developed on an on-going basis at 
+[https://github.com/liblit/csi-cc](https://github.com/liblit/csi-cc). Please go there if you would like to
+get a more recent version
