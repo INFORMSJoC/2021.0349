@@ -1,0 +1,18 @@
+Application,Description,Versions,Mean LOC
+print_tokens,Siemens,1,727
+print_tokens2,Siemens,1,568
+replace,Siemens,1,563
+schedule,Siemens,1,413
+schedule2,Siemens,1,373
+tcas,Siemens,1,173
+tot_info,Siemens,1,564
+bash,Linux shell,6,80443
+bc,Linux utility,1,14292
+ccrypt,Linux utility,1,5280
+exif,Linux utility,1,10611
+flex,Linux utility,5,14946
+gcc,C compiler,1,222196
+grep,Linux utility,5,15460
+gzip,Linux utility,5,8114
+sed,Linux utility,7,14314
+space,ADL interpreter,1,9563
