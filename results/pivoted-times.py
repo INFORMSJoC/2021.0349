@@ -35,16 +35,16 @@ def main() -> None:
     pivoted.index = pivoted.index.str.replace('_', '\\_')
     pivoted.loc[mean_label] = gmean(pivoted)
 
-    # A hack (due to time): re-calculate the geometric mean for BB, ignoring missing data.
+    # A hack: ignore missing data for basic block results.
     # Specifically, manually edit those applications that run out of time on
-    # *all* tests for both LOCAL and LEMON.
-    # Unfortunately, we are setting these to 1.0.  NaN would be cleaner, but
-    # I'm not sure how to handle it well in tikz.
+    # *all* tests for both LOCAL and SET-COVER.
+    # We are setting these to 1.0 to simulate a "missing" bar in LaTeX;
+    # NaN would be cleaner, but it's hard to handle in tikz.
     missingApps = ('gcc', 'grep')
     missingColumns = ('bb-local', 'bb-lemon')
     for column in missingColumns:
         for app in missingApps:
-            # set it to 1.0, since this is the closest I could get to a "missing
+            # set it to 1.0, the closest we can get to a "missing
             # bar" while still showing the x label in TeX
             pivoted.loc[app, column] = 1.0
         pivoted.loc[mean_label, column] = gmean(pivoted[~pivoted.index.isin(missingApps+(mean_label,))][column])

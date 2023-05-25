@@ -55,7 +55,35 @@ timings for each compilation, per section 4.1 of
 
 ## Figure 5
 
-TODO
+This figure is generated in two steps from the raw data.  First, to generate a CSV
+file containing the relative compilation time for each variant, run the command:
+```
+python3 make-figures.py --saturated
+```
+This will produce a file named `saturated.csv` containing the compilation time for
+basic blocks and call sites instrumentation for each application using the `Local` and
+`Set-cover` solvers, relative to base compilation with no instrumentation.
+
+To filter the data down to those rows relevant for Figure 5 (and re-order to match the
+application order from the paper), run the command:
+```
+python3 pivoted-times.py
+```
+This will produce a CSV file with the exact data used to produce the plots in Figure 5.
+Columns prefixed with `bb-` refer to `Basic Blocks` instrumentation results (Figure 5a);
+those with `cc-` refer to `Call Sites` instrumentation (Figure 5b).
+Columns labeled with `-local` refer to the locally-optimal solver; those labeled with
+`-lemon` refer to the `Set-cover` solver.
+
+Both scripts to generate this table require [Python 3](https://www.python.org/)
+,the [pandas](https://pandas.pydata.org/) library,
+the [NumPy](https://numpy.org/) library, and the
+[SciPy](https://scipy.org/) library.
+
+The raw data used for this table is provided in
+[compile-results.csv](compile-results.csv), which contains the raw measured
+timings and memory usage for each compilation, per section 4.1 of
+[the paper](https://doi.org/10.1287/ijoc.2021.0349).
 
 ## Table 5
 
