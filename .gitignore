@@ -1,2 +1,3 @@
 *~
 *.o
+results/all_agg.csv

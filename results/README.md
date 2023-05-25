@@ -11,7 +11,35 @@ This table is generated directly from file [c-applications.csv](c-applications.c
 
 ## Table 3
 
-TODO
+This table is generated in two steps from the raw data.  First, to generate a CSV
+file containing the percentage of compilations for each application that ran out of
+time and (separately) the percentage of compilations that ran out of memory, run
+the command:
+```
+python3 make-figures.py --failures
+```
+This will produce a file named `all_agg.csv` containing the percentage of time- and
+memory-out runs for each application.
+
+To summarize and pivot this data into a CSV file that matches the table from the
+paper, run the command:
+```
+python3 pivoted-failures.py
+```
+Columns prefixed with `bb-` refer to `Basic Blocks` results; those with `cc-` refer
+to `Call Sites`.  Columns labeled with `-gams` refer to the `netflow` solver; those
+labeled with `-local` refer to the locally-optimal solver; those labeled with
+`-lemon` refer to the new `set-cover` solver.
+
+Both scripts to generate this table require [Python 3](https://www.python.org/)
+,the [pandas](https://pandas.pydata.org/) library,
+the [NumPy](https://numpy.org/) library, and the
+[SciPy](https://scipy.org/) library.
+
+The raw data used for this table is provided in
+[compile-results.csv](compile-results.csv), which contains the raw measured
+timings and memory usage for each compilation, per section 4.1 of
+[the paper](https://doi.org/10.1287/ijoc.2021.0349).
 
 ## Table 4
 
