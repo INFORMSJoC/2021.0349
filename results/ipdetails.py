@@ -1,5 +1,4 @@
 import pandas as pd
-import matplotlib.pyplot as plt
 
 def print_table(df:pd.DataFrame) -> None:
     
@@ -20,35 +19,6 @@ def print_table(df:pd.DataFrame) -> None:
 
     # This is just to see the final separation times:
     # print (f"{df_tiny['triangleTime_lf'].mean()}, {df_medium['triangleTime_lf'].mean()}, {df_large['triangleTime_lf'].mean()}, {df_jumbo['triangleTime_lf'].mean()}")
-
-
-def make_scatterplots(df:pd.DataFrame) -> None:
-    x = df.nodes
-    y = df.totalTriangleTime
-    plt.style.use('seaborn')
-
-    # plt.rcParams.update({
-    # "font.family": "serif",  # use serif/main font for text elements
-    # "text.usetex": True,     # use inline math for ticks
-    # "pgf.rcfonts": False     # don't setup fonts from rc parameters
-    # })
-
-    fig, ax = plt.subplots(1, 1)
-    ax.scatter(x,y)
-    ax.set_ylabel('Separation time (s)')
-    ax.set_yscale("log")
-    ax.set_xlabel('CFG Nodes')
-    fig.savefig("sep-time.png", format='png')
-
-    x = df.nodes
-    y = df.TotalNumNodes
-    fig, ax = plt.subplots(1, 1)
-    ax.scatter(x,y)
-    ax.set_ylabel('Branch and Bound Nodes')
-    ax.set_yscale("log")
-    ax.set_xlabel('CFG Nodes')
-
-    fig.savefig("nodes.png", format='png')
     
 
 
@@ -56,12 +26,12 @@ def make_scatterplots(df:pd.DataFrame) -> None:
 def main() -> None:
 
     lc = pd.read_csv('lemon-coarse.csv')
-    # Just do for trial 1
+    # Just do for trial 1; results don't differ for the same app/version run
     lc = lc[lc['trial']==1]
     lc.drop(columns='trial', inplace=True)
 
     lf = pd.read_csv('lemon-fine.csv')
-    # Just do for trial 1
+    # Just do for trial 1; results don't differ for the same app/version run
     lf = lf[lf['trial']==1]
     lf.drop(columns='trial', inplace=True)
 
@@ -81,7 +51,6 @@ def main() -> None:
     df['TotalBaseTime'] = df['totalIpTime'] + df['totalTriangleTime']
 
     print_table(df)
-    make_scatterplots(df)
 
 
 if __name__ == '__main__':

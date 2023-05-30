@@ -102,4 +102,16 @@ sorting the applications.
 
 ## Table 6
 
-TODO
+To generate a CSV file containing the results for this table,
+simply run the [ipdetails.py](ipdetails.py) script.
+This script requires [Python 3](https://www.python.org/)
+and the [pandas](https://pandas.pydata.org/) library.
+
+The raw data used for this table is provided in the
+[lemon-coarse.csv](lemon-coarse.csv) and
+[lemon-fine.csv](lemon-fine.csv) files.
+These files contain the minimally-reformatted log messages
+produced by the `set-cover` (i.e., `lemon`) solver on each
+application, from section 4 (specifically section 4.3) of
+[the paper](https://doi.org/10.1287/ijoc.2021.0349).
+
