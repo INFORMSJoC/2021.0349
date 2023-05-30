@@ -133,33 +133,6 @@ def main() -> None:
                       {'saturatedrelativetime' : mstats.gmean},
                       str(options.output_directory), 'saturated.csv')
 
-    ###################################################################
-    #
-    #  Count how often lemon gets a more optimal solution than
-    #  local (both absolute and percentage of functions).
-    #
-
-    """ TODO """
-
-    """
-    print('Functions where costs of LEMON and local solutions differ; higher is better:\n')
-    costs = solution.pivot_table(index=['application', 'version', 'function', 'file'], values='objectiveValue', columns='instrumentor', aggfunc=[len, numpy.mean])
-    check_counts(costs, 1)
-    different = pandas.DataFrame(index=costs.index)
-    for site_kind in 'bb', 'cc':
-        lemon_costs = costs['mean', site_kind + '-lemon']
-        local_costs = costs['mean', site_kind + '-local']
-        same_costs = lemon_costs.isna() | local_costs.isna() | (lemon_costs == local_costs)
-        different[site_kind] = ~same_costs
-    different = different.groupby(level=['application'])
-    different_count = different.sum()
-    different_count = different_count.mask(relative.isna())
-    different_fraction = different_count / different.count()
-    combined = pandas.concat([different_count, different_fraction], axis=1, keys=('count', 'fraction'))
-    headers = ['\napplication'] + list(map('\n'.join, combined.columns.tolist()))
-    print_with_descriptive_rows(combined, headers=headers, floatfmt=('s', '.0f', '.0f', '.0%', '.0%'))
-    """
-
 
 if __name__ == '__main__':
     main()

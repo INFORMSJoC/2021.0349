@@ -87,7 +87,18 @@ timings and memory usage for each compilation, per section 4.1 of
 
 ## Table 5
 
-TODO
+To generate a CSV file containing the results for this table,
+simply run the [cost-compare.py](cost-compare.py) script.
+This script requires [Python 3](https://www.python.org/)
+,the [pandas](https://pandas.pydata.org/) library, and
+the [NumPy](https://numpy.org/) library.
+
+The raw data used for this table is provided in
+[solution.csv](solution.csv), which contains the observed
+instrumentation costs for each solver on each application.
+The script also depends on the raw data in
+[compile-results.csv](compile-results.csv) for listing and
+sorting the applications.
 
 ## Table 6
 

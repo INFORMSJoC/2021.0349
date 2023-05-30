@@ -2,30 +2,25 @@
 
 from argparse import ArgumentParser
 from pathlib import Path
+from sys import stdout
 from typing import List, Tuple, Union
 
 import numpy
 import pandas
-from tabulate import tabulate
-
 
 def print_with_descriptive_rows(frame: pandas.DataFrame, headers: List[str], floatfmt: Union[str, Tuple[str, ...]]) -> None:
+    # imports in here, so extra libraries aren't required to generate CSV
+    from tabulate import tabulate
+    import warnings
+    warnings.simplefilter(action='ignore', category=FutureWarning)
+
     epilogue = frame.agg(['min', 'max', 'median', 'mean'])
     print(tabulate(frame.append(epilogue), headers=headers, floatfmt=floatfmt))
-
-
-def check_counts(costs: pandas.DataFrame, expectation: int) -> None:
-    all_values = costs['len'].values.flatten('K')
-    all_present_values = map(int, filter(pandas.notna, all_values))
-    distinct_values = set(all_present_values)
-    if distinct_values == {expectation}: return
-    explanation = 'values include {}; expected to only see {}'.format(distinct_values, expectation)
-    raise ValueError(explanation)
-
 
 def main() -> None:
     parser = ArgumentParser()
     parser.add_argument('results_directory', help='directory containing results CSV files; defaults to directory containing this script', nargs='?', type=Path, default=Path(__file__).parent)
+    parser.add_argument('--prettyprint', dest='pprint', help='produce human-readable output (rather than CSV)', action='store_true')
     options = parser.parse_args()
 
     ###################################################################
@@ -35,11 +30,6 @@ def main() -> None:
 
     def read_csv(path_stem: str) -> pandas.DataFrame:
         return pandas.read_csv(options.results_directory / (path_stem + '.csv'))
-
-    # per_build_index_columns = ('application', 'version', 'instrumentor')
-    # per_function_index_columns = per_build_index_columns + ('trial', 'function')
-    # lemon_coarse = read_csv('lemon-coarse', index_col=per_function_index_columns)
-    # lemon_fine = read_csv('lemon-fine', index_col=per_function_index_columns + ('iteration',))
 
     # discard compile results where success is False; these failed to compile
     # discard compile results for simple and none instrumentors; we don't subsequently use these
@@ -58,20 +48,21 @@ def main() -> None:
 
     ###################################################################
     #
-    #  show facts of interest, derived from the above data tables
+    # Relative timings (only used for filtering in this script)
     #
 
-    print('Compilation times for LEMON relative to local; lower is better:\n')
     timings = compile_results.pivot_table(index='application', values='compiletime', columns='instrumentor', aggfunc=[len, numpy.mean])
     relative = pandas.DataFrame(index=timings.index)
     for site_kind in 'bb', 'cc':
         relative[site_kind] = timings['mean', site_kind + '-lemon'] / timings['mean', site_kind + '-local']
-    print_with_descriptive_rows(relative, headers=['application'] + relative.columns.tolist(), floatfmt='.0%')
-    print('\n')
 
-    print('Functions where costs of LEMON and local solutions differ; higher is better:\n')
+    ###################################################################
+    #
+    #  Count how often lemon gets a more optimal solution than
+    #  local (both absolute and percentage of functions).
+    #
+
     costs = solution.pivot_table(index=['application', 'version', 'function', 'file'], values='objectiveValue', columns='instrumentor', aggfunc=[len, numpy.mean])
-    check_counts(costs, 1)
     different = pandas.DataFrame(index=costs.index)
     for site_kind in 'bb', 'cc':
         lemon_costs = costs['mean', site_kind + '-lemon']
@@ -82,10 +73,21 @@ def main() -> None:
     different_count = different.sum()
     different_count = different_count.mask(relative.isna())
     different_fraction = different_count / different.count()
-    combined = pandas.concat([different_count, different_fraction], axis=1, keys=('count', 'fraction'))
-    headers = ['\napplication'] + list(map('\n'.join, combined.columns.tolist()))
-    print_with_descriptive_rows(combined, headers=headers, floatfmt=('s', '.0f', '.0f', '.0%', '.0%'))
-
+    combined = pandas.concat([different_count, different_fraction], axis=1, keys=('count', 'percent'))
+    if options.pprint:
+        print('Functions where costs of LEMON and local solutions differ; higher is better:\n')
+        headers = ['\napplication'] + list(map('\n'.join, combined.columns.tolist()))
+        print_with_descriptive_rows(combined, headers=headers, floatfmt=('s', '.0f', '.0f', '.1%', '.1%'))
+    else:
+        # flatten column names
+        combined.columns = ['%s-%s' % (instr_type, agg_style) \
+                            for agg_style, instr_type in combined.columns]
+        combined = combined.reindex(sorted(combined.columns), axis=1)
+        # remove decimal points in integer columns by converting to strings; ignore NaNs
+        for col in combined.columns:
+            if 'count' in col:
+                combined[col] = combined[col].map(lambda n : '' if pandas.isna(n) else '%.0f' % n)
+        combined.to_csv(stdout, float_format='%.3f')
 
 if __name__ == '__main__':
     main()
