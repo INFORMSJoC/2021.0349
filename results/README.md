@@ -31,8 +31,8 @@ to `Call Sites`.  Columns labeled with `-gams` refer to the `netflow` solver; th
 labeled with `-local` refer to the locally-optimal solver; those labeled with
 `-lemon` refer to the new `set-cover` solver.
 
-Both scripts to generate this table require [Python 3](https://www.python.org/)
-,the [pandas](https://pandas.pydata.org/) library,
+Both scripts to generate this table require [Python 3](https://www.python.org/),
+the [pandas](https://pandas.pydata.org/) library,
 the [NumPy](https://numpy.org/) library, and the
 [SciPy](https://scipy.org/) library.
 
@@ -75,8 +75,8 @@ those with `cc-` refer to `Call Sites` instrumentation (Figure 5b).
 Columns labeled with `-local` refer to the locally-optimal solver; those labeled with
 `-lemon` refer to the `Set-cover` solver.
 
-Both scripts to generate this table require [Python 3](https://www.python.org/)
-,the [pandas](https://pandas.pydata.org/) library,
+Both scripts to generate this table require [Python 3](https://www.python.org/),
+the [pandas](https://pandas.pydata.org/) library,
 the [NumPy](https://numpy.org/) library, and the
 [SciPy](https://scipy.org/) library.
 
@@ -89,8 +89,8 @@ timings and memory usage for each compilation, per section 4.1 of
 
 To generate a CSV file containing the results for this table,
 simply run the [cost-compare.py](cost-compare.py) script.
-This script requires [Python 3](https://www.python.org/)
-,the [pandas](https://pandas.pydata.org/) library, and
+This script requires [Python 3](https://www.python.org/),
+the [pandas](https://pandas.pydata.org/) library, and
 the [NumPy](https://numpy.org/) library.
 
 The raw data used for this table is provided in
