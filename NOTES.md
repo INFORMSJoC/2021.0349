@@ -13,14 +13,15 @@ Also needed to install libopt-dev
 
 (Need all with assertions enabled, so use the make script to build that is in your llvm)
 
-Jeff -- put the doc
+
+
 
 Someone needs to tell the compiler the following flags
 LLVM_CONFIG=/path/to/llvm-config
 
+If using the build script, this is in
+scripts/5.10.60.1-microsoft-standard-WSL2/install/bin/llvm-config
 
-~/llvm/5.10.60.1-microsoft-standard-WSL2/install
-(???) I am not sure what this was...
 
 ## Folders 
 
@@ -40,8 +41,13 @@ docs/
 README.md  -> Nothing to see here.  See csi-cc documentation.
 
 
+## Jeff compiling notes for csi-cc 
+This is the command I used.  (After building llvm from source)
 
-# Jeff compiling notes for applications
+scons LLVM_CONFIG=$HOME/git-mods/2021.0349/scripts/5.10.60.1-microsoft-standard-WSL2/install/bin/llvm-config LEMONDIR=$HOME/lemon GUROBIDIR=$HOME/gurobi/linux64
+
+
+## Jeff compiling notes for applications
 
 For bc, setting 
 export CC="${HOME}/git-mods/csi-cc-private/Release/csi-cc";
@@ -81,8 +87,9 @@ export CC="${HOME}/git-mods/csi-cc-private/Release/csi-cc";
 export CFLAGS="-std=gnu89 -Wno-tautological-constant-out-of-range-compare -Wno-switch -Wno-implicit-function-declaration -Wno-parentheses -Wno-enum-conversion -Wno-format --trace=${HOME}/git-mods/csi-cc-private/schemas/bb.schema -csi-opt=3 -opt-style=lemon -log-stats"
 Then just do scons 
 
-Add your SConstruct (edited SConctrcuted to build)
-Then just scons 
+Add your SConstruct (edited SConstruct to build)
+Then just 
+
 
 
 ##  

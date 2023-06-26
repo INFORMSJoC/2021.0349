@@ -20,7 +20,7 @@ https://doi.org/10.1287/ijoc.2019.0349.cd
 Below is the BibTex for citing this snapshot of the repository
 
 ```
-@misc{michini.et.al-22,
+@misc{michini.et.al-repo-22,
   author =        {Carla Michini and Peter Ohmann and Ben Liblit and Jeff Linderoth},
   publisher =     {INFORMS Journal on Computing},
   title =         {{A Set Covering Approach to
@@ -44,7 +44,7 @@ First, one needs to build the csi-cc compiler, which is based on the [llvm compi
 
 ### Building LLVM 
 
-In the scripts subdirectory, we have provided a "build-llvm" script that downloads and builds clang CFE internals (cfe), the compielr runtime (compiler-rt), and llvm.  
+In the scripts subdirectory, we have provided a "build-llvm" script that downloads and builds clang CFE internals (cfe), the compiler runtime (compiler-rt), and llvm.  
 Just running the command 
 ```build-llvm```
 in the scripts/ directory should be sufficient to download and build all necessary software.  If users have these tools already installed on their system, this step may be omitted. 
@@ -54,7 +54,7 @@ in the scripts/ directory should be sufficient to download and build all necessa
 
 The main program csi-cc uses the [Scons](https://scons.org/) software construction tool for building.
 Building csi-cc with the integer-programming based optimal program instrumentation requires both the LEMON and Gurobi to be installed. 
-Lemon may be obtained from [the Lemon Graph Library Web Site](https://lemon.cs.elte.hu/trac/lemon).  Gurobi is available for academic use from the [Gurobi Academic Program and Liicenses page](https://www.gurobi.com/academia/academic-program-and-licenses/).
+Lemon may be obtained from [the Lemon Graph Library Web Site](https://lemon.cs.elte.hu/trac/lemon).  Gurobi is available for academic use from the [Gurobi Academic Program and Licenses page](https://www.gurobi.com/academia/academic-program-and-licenses/).
 
 There are instructions for building and running the csi-cc code in the src/docs directory.  For most users, the command 
 ```
@@ -65,12 +65,12 @@ should build the compiler, assuming all necessary dependencies are installed.  T
 
 ## Results
 
-In the data directory, we have placed many of the C codes that we used 
+In the data directory, we have placed source code for many of the evaluated C applications. 
 
 Other applications from the paper may be retrieved from the 
 [Software-artifact Infrastructure Repository](https://sir.csc.ncsu.edu/portal/index.php). 
 
-Also in the data directory, there is a script run-all.sh that demonstrates how to compile the example codes using the csi-cc compiler, instrumented with the integer-programming-based to optimize program coverage.  The sample script makes use of a special ijoc-{bb,cc}.schema files (located in the src/schemas directory) that will allow for complete compilation of all the sample programs, by 'bypassing' instrumentation of functions that take too long to compile.  Note that this is not the same configuration used in generating results for the paper, where instead, comiles were allowed to time out after 3 hours. 
+In the data directory, there is a script run-all.sh that demonstrates how to compile the example codes using the csi-cc compiler instrumented with the integer-programming-based to optimize program coverage.  The sample script makes use of special ijoc-{bb,cc}.schema files (located in the src/schemas directory) that will allow for complete compilation of all the sample programs by 'bypassing' instrumentation of functions that take too long to compile.  The ijoc-bb.schema file is for basic block coverage, while the ijoc-bb.schema is for call site coverage only.  Note that these schema are not the same as used in generating results for the paper.  For the computational results of the paper, program compliation was allowed to time out after 3 hours. 
 
 
 ## Replicating
