@@ -40,7 +40,8 @@ docs/
 README.md  -> Nothing to see here.  See csi-cc documentation.
 
 
-# Jeff compiling notes 
+
+# Jeff compiling notes for applications
 
 For bc, setting 
 export CC="${HOME}/git-mods/csi-cc-private/Release/csi-cc";
@@ -50,7 +51,6 @@ export CFLAGS="--trace=${HOME}/git-mods/csi-cc-private/schemas/bb.schema -csi-op
 
 Try this for bc 
 ./configure "CC=${HOME}/git-mods/csi-cc-private/Release/csi-cc -g -std=gnu89 -Wno-pointer-sign -fno-builtin --trace=${HOME}/git-mods/csi-cc-private/schemas/bb.schema -csi-opt=3 -opt-style=lemon -log-stats" 
-
 
 For ccrypt need
 ./configure "CC=${HOME}/git-mods/csi-cc-private/Release/csi-cc -g -std=gnu89 -Wno-pointer-sign -fno-builtin --trace=${HOME}/git-mods/csi-cc-private/schemas/bb.schema -csi-opt=3 -opt-style=lemon -log-stats" 

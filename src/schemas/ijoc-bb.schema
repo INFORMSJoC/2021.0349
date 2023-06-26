@@ -1,0 +1,15 @@
+yyparse;{}
+decl_attributes;{}
+check_format_info;{}
+grokdeclarator;{}
+expand_call;{}
+try_combine;{}
+simplify_comparison;{}
+cse_insn;{}
+find_reg;{}
+fold;{}
+jump_optimize;{}
+expand_binop;{}
+find_reloads;{}
+reload;{}
+*;{BBC}
