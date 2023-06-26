@@ -75,7 +75,7 @@ In the data directory, there is a script run-all.sh that demonstrates how to com
 
 ## Replicating
 
-Replicating all of the results would be an incredibly time-consuming process.  Instead, we have put the raw text files containing results from each run in the results/ directory. 
+Replicating all of the results would be an incredibly time-consuming, or depending on runtime environment, an impossible process.  Instead, we have put the raw text files containing results from each run in the results/ directory. 
 The figures can be created by running the scripts in the results directory.  There is a README file in that directory explaining how to generate all figures and tables from the paper.
 
 
