@@ -12,4 +12,7 @@ jump_optimize;{}
 expand_binop;{}
 find_reloads;{}
 reload;{}
+compile_program;{}
+re_match_2;{}
+regex_compile;{}
 *;{BBC}
