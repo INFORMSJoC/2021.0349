@@ -70,15 +70,35 @@ CSI_CC_DIR=${HOME}/git-mods/2021.0349/src
 
 cd tcas/src
 echo "Making tcas with basic block coverage"
-${CSI_CC_DIR}/Release/csi-cc -g -std=gnu89 --trace=${CSI_CC_DIR}/schemas/ijoc-bb.schema -csi-opt=3 -opt-style=lemon -log-stats tcas.c > tcas-bb.out 2>&1
+${CSI_CC_DIR}/Release/csi-cc -g -std=gnu89 --trace=${CSI_CC_DIR}/schemas/ijoc-bb.schema -csi-opt=3 -opt-style=lemon -log-stats tcas.c > ../../tcas-bb.out 2>&1
 echo "Making tcas with call site coverage"
-${CSI_CC_DIR}/Release/csi-cc -g -std=gnu89 --trace=${CSI_CC_DIR}/schemas/ijoc-cc.schema -csi-opt=3 -opt-style=lemon -log-stats tcas.c > tcas-cc.out 2>&1
+${CSI_CC_DIR}/Release/csi-cc -g -std=gnu89 --trace=${CSI_CC_DIR}/schemas/ijoc-cc.schema -csi-opt=3 -opt-style=lemon -log-stats tcas.c > ../../tcas-cc.out 2>&1
 cd ../..
 
 cd schedule2/src
 echo "Making schedule2 with basic block coverage"
-${CSI_CC_DIR}/Release/csi-cc -g -std=gnu89 --trace=${CSI_CC_DIR}/schemas/ijoc-bb.schema -csi-opt=3 -opt-style=lemon -log-stats schedule2.c > schedule2-bb.out 2>&1
+${CSI_CC_DIR}/Release/csi-cc -g -std=gnu89 -Wno-parentheses -Wno-implicit --trace=${CSI_CC_DIR}/schemas/ijoc-bb.schema -csi-opt=3 -opt-style=lemon -log-stats schedule2.c > ../../schedule2-bb.out 2>&1
 echo "Making schedule2 with call site coverage"
-${CSI_CC_DIR}/Release/csi-cc -g -std=gnu89 --trace=${CSI_CC_DIR}/schemas/ijoc-cc.schema -csi-opt=3 -opt-style=lemon -log-stats schedule2.c > schedule2-cc.out 2>&1
+${CSI_CC_DIR}/Release/csi-cc -g -std=gnu89 -Wno-parentheses -Wno-implicit --trace=${CSI_CC_DIR}/schemas/ijoc-cc.schema -csi-opt=3 -opt-style=lemon -log-stats schedule2.c > ../../schedule2-cc.out 2>&1
 cd ../..
 
+cd schedule/src
+echo "Making schedule with basic block coverage"
+${CSI_CC_DIR}/Release/csi-cc -g -std=gnu89 -Wno-return-type -Wno-macro-redefined -Wno-implicit --trace=${CSI_CC_DIR}/schemas/ijoc-bb.schema -csi-opt=3 -opt-style=lemon -log-stats schedule.c > ../../schedule-bb.out 2>&1
+echo "Making schedule with call site coverage"
+${CSI_CC_DIR}/Release/csi-cc -g -std=gnu89 -Wno-return-type -Wno-macro-redefined -Wno-implicit --trace=${CSI_CC_DIR}/schemas/ijoc-cc.schema -csi-opt=3 -opt-style=lemon -log-stats schedule.c > ../../schedule-cc.out 2>&1
+cd ../..
+
+cd replace/src
+echo "Making replace with basic block coverage"
+${CSI_CC_DIR}/Release/csi-cc -g -std=gnu89 --trace=${CSI_CC_DIR}/schemas/ijoc-bb.schema -csi-opt=3 -opt-style=lemon -log-stats replace.c > ../../replace-bb.out 2>&1
+echo "Making replace with call site coverage"
+${CSI_CC_DIR}/Release/csi-cc -g -std=gnu89 --trace=${CSI_CC_DIR}/schemas/ijoc-cc.schema -csi-opt=3 -opt-style=lemon -log-stats replace.c > ../../replace-cc.out 2>&1
+cd ../..
+
+cd totinfo/src
+echo "Making totinfo with basic block coverage"
+${CSI_CC_DIR}/Release/csi-cc -lm -g -std=gnu89 -Wno-comment -Wno-return-type --trace=${CSI_CC_DIR}/schemas/ijoc-bb.schema -csi-opt=3 -opt-style=lemon -log-stats tot_info.c > ../../totinfo-bb.out 2>&1
+echo "Making totinfo with call site coverage"
+${CSI_CC_DIR}/Release/csi-cc -lm -g -std=gnu89 -Wno-comment -Wno-return-type --trace=${CSI_CC_DIR}/schemas/ijoc-cc.schema -csi-opt=3 -opt-style=lemon -log-stats tot_info.c > ../../totinfo-cc.out 2>&1
+cd ../..
