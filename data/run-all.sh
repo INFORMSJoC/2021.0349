@@ -154,5 +154,11 @@ cd ../..
 # cd ../..
 
 # bash 
+cd bash/src
+echo "Making bash with call site coverage"
 ./configure "CC=/home/jeff/git-mods/2021.0339/src/Release/csi-cc -g -std=gnu89 --trace=${CSI_CC_DIR}/schemas/ijoc-cc.schema -csi-opt=3 -opt-style=lemon -log-stats"
+make > ../../bash-cc.out 2>&1
+make clean
+cd ../..
+
 
