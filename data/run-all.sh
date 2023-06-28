@@ -153,3 +153,6 @@ cd ../..
 # scons --no-cache > ../../gcc-cc.out 2>&1
 # cd ../..
 
+# bash 
+./configure "CC=/home/jeff/git-mods/2021.0339/src/Release/csi-cc -g -std=gnu89 --trace=${CSI_CC_DIR}/schemas/ijoc-cc.schema -csi-opt=3 -opt-style=lemon -log-stats"
+
