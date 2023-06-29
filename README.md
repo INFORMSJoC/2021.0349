@@ -72,6 +72,7 @@ Other applications from the paper may be retrieved from the
 
 In the data directory, there is a script run-all.sh that demonstrates how to compile the example codes using the csi-cc compiler instrumented with the integer-programming-based to optimize program coverage.  The sample script makes use of special ijoc-{bb,cc}.schema files (located in the src/schemas directory) that will allow for complete compilation of all the sample programs by 'bypassing' instrumentation of functions that take too long to compile.  The ijoc-bb.schema file is for basic block coverage, while the ijoc-bb.schema is for call site coverage only.  Note that these schema are not the same as used in generating results for the paper.  For the computational results of the paper, program compliation was allowed to time out after 3 hours. 
 
+In order to build bash, the system will require the yacc (bison) parser generator.
 
 ## Replicating
 

@@ -1,5 +1,8 @@
 #!/bin/bash
 
+
+#  And also comment/uncomment the articular applications/codes you would like to instrument.  This script is meant more as a guideline as to how to run the code.  To run this script, the csi-cc compile must already be built.
+
 # You need to set this to point to your csi-cc installation
 CSI_CC_DIR=${HOME}/git-mods/2021.0349/src
 
@@ -79,44 +82,44 @@ ${CSI_CC_DIR}/Release/csi-cc -g -std=gnu89 -Wno-parentheses -Wno-deprecated-decl
 cd ../..
 
 
-# cd exif/libexif-0.6.10
-# make clean
-# ./configure "CC=${CSI_CC_DIR}/Release/csi-cc -g -std=gnu89 -Wno-pointer-sign -Wno-format -fno-builtin --trace=${CSI_CC_DIR}/schemas/ijoc-bb.schema -csi-opt=3 -opt-style=lemon -log-stats"
-# echo "Compiling libexif with basic block"
-# make > ../../libexif-bb.out 2>&1
-# make install 
-# cd ../..
-# cd exif/exif-0.6.9
-# make clean
-# ./configure "CC=${CSI_CC_DIR}/Release/csi-cc -g -std=gnu89 -Wno-enum-conversion -Wno-format --trace=${CSI_CC_DIR}/schemas/ijoc-bb.schema -csi-opt=3 -opt-style=lemon -log-stats -I../libexif-0.6.10/install/include" "PKG_CONFIG_PATH=../libexif-0.6.10/install/lib/pkgconfig"
-# echo "Making exif with basic block"
-# make > ../../exif-bb.out 2>&1
-# cd ../..
+cd exif/libexif-0.6.10
+make clean
+./configure "CC=${CSI_CC_DIR}/Release/csi-cc -g -std=gnu89 -Wno-pointer-sign -Wno-format -fno-builtin --trace=${CSI_CC_DIR}/schemas/ijoc-bb.schema -csi-opt=3 -opt-style=lemon -log-stats"
+echo "Compiling libexif with basic block"
+make > ../../libexif-bb.out 2>&1
+make install 
+cd ../..
+cd exif/exif-0.6.9
+make clean
+./configure "CC=${CSI_CC_DIR}/Release/csi-cc -g -std=gnu89 -Wno-enum-conversion -Wno-format --trace=${CSI_CC_DIR}/schemas/ijoc-bb.schema -csi-opt=3 -opt-style=lemon -log-stats -I../libexif-0.6.10/install/include" "PKG_CONFIG_PATH=../libexif-0.6.10/install/lib/pkgconfig"
+echo "Making exif with basic block"
+make > ../../exif-bb.out 2>&1
+cd ../..
 
-# cd exif/libexif-0.6.10
-# make clean
-# ./configure "CC=${CSI_CC_DIR}/Release/csi-cc -g -std=gnu89 -Wno-pointer-sign -Wno-format -fno-builtin --trace=${CSI_CC_DIR}/schemas/ijoc-cc.schema -csi-opt=3 -opt-style=lemon -log-stats"
-# echo "Compiling libexif with call site"
-# make > ../../libexif-cc.out 2>&1
-# make install 
-# cd ../..
-# cd exif/exif-0.6.9
-# make clean
-# ./configure "CC=${CSI_CC_DIR}/Release/csi-cc -g -std=gnu89 -Wno-enum-conversion -Wno-format --trace=${CSI_CC_DIR}/schemas/ijoc-cc.schema -csi-opt=3 -opt-style=lemon -log-stats -I../libexif-0.6.10/install/include" "PKG_CONFIG_PATH=../libexif-0.6.10/install/lib/pkgconfig"
-# echo "Making exif with call site"
-# make > ../../exif-cc.out 2>&1
-# cd ../..
+cd exif/libexif-0.6.10
+make clean
+./configure "CC=${CSI_CC_DIR}/Release/csi-cc -g -std=gnu89 -Wno-pointer-sign -Wno-format -fno-builtin --trace=${CSI_CC_DIR}/schemas/ijoc-cc.schema -csi-opt=3 -opt-style=lemon -log-stats"
+echo "Compiling libexif with call site"
+make > ../../libexif-cc.out 2>&1
+make install 
+cd ../..
+cd exif/exif-0.6.9
+make clean
+./configure "CC=${CSI_CC_DIR}/Release/csi-cc -g -std=gnu89 -Wno-enum-conversion -Wno-format --trace=${CSI_CC_DIR}/schemas/ijoc-cc.schema -csi-opt=3 -opt-style=lemon -log-stats -I../libexif-0.6.10/install/include" "PKG_CONFIG_PATH=../libexif-0.6.10/install/lib/pkgconfig"
+echo "Making exif with call site"
+make > ../../exif-cc.out 2>&1
+cd ../..
 
-# cd bc/src 
-# make clean
-# ./configure "CC=${CSI_CC_DIR}/Release/csi-cc -g -std=gnu89 -Wno-pointer-sign -fno-builtin --trace=${CSI_CC_DIR}/schemas/ijoc-bb.schema -csi-opt=3 -opt-style=lemon -log-stats"
-# echo "Compiling bc with basic block"
-# make > ../../bc-bb.out 2>&1
-# make clean
-# ./configure "CC=${CSI_CC_DIR}/Release/csi-cc -g -std=gnu89 -Wno-pointer-sign -Wno-implicit -fno-builtin --trace=${CSI_CC_DIR}/schemas/ijoc-cc.schema -csi-opt=3 -opt-style=lemon -log-stats"
-# echo "Compiling bc with call site"
-# make > ../../bc-cc.out 2>&1
-# cd ../..
+cd bc/src 
+make clean
+./configure "CC=${CSI_CC_DIR}/Release/csi-cc -g -std=gnu89 -Wno-pointer-sign -fno-builtin --trace=${CSI_CC_DIR}/schemas/ijoc-bb.schema -csi-opt=3 -opt-style=lemon -log-stats"
+echo "Compiling bc with basic block"
+make > ../../bc-bb.out 2>&1
+make clean
+./configure "CC=${CSI_CC_DIR}/Release/csi-cc -g -std=gnu89 -Wno-pointer-sign -Wno-implicit -fno-builtin --trace=${CSI_CC_DIR}/schemas/ijoc-cc.schema -csi-opt=3 -opt-style=lemon -log-stats"
+echo "Compiling bc with call site"
+make > ../../bc-cc.out 2>&1
+cd ../..
 
 
 cd sed/src
@@ -154,11 +157,11 @@ cd ../..
 # cd ../..
 
 # bash 
-cd bash/src
-echo "Making bash with call site coverage"
-./configure "CC=/home/jeff/git-mods/2021.0339/src/Release/csi-cc -g -std=gnu89 --trace=${CSI_CC_DIR}/schemas/ijoc-cc.schema -csi-opt=3 -opt-style=lemon -log-stats"
-make > ../../bash-cc.out 2>&1
-make clean
-cd ../..
+# cd bash/src
+# echo "Making bash with call site coverage"
+# ./configure "CC=/home/jeff/git-mods/2021.0339/src/Release/csi-cc -g -std=gnu89 --trace=${CSI_CC_DIR}/schemas/ijoc-cc.schema -csi-opt=3 -opt-style=lemon -log-stats"
+# make > ../../bash-cc.out 2>&1
+# make clean
+# cd ../..
 
 
