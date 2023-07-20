@@ -1,0 +1,181 @@
+Import('env')
+
+import SCons
+sconsVersion = env._get_major_minor_revision(SCons.__version__)
+
+lenv = env.Clone(
+    tools=(
+        'clang-analyzer',
+    ),
+    toolpath=(
+        '#scons-tools',
+    ),
+)
+
+if 'GAMSDIR' in lenv:
+    lenv.AppendUnique(
+        CPPDEFINES=['USE_GAMS'],
+        CPPPATH=(
+            '$GAMSDIR/apifiles/C++/api',
+            '$GAMSDIR/apifiles/C/api'
+        ),
+    )
+
+if 'LEMONDIR' in lenv:
+    lenv.AppendUnique(
+        CPPDEFINES=['USE_LEMON'],
+        CPPPATH=(
+            '$LEMONDIR/include',
+        ),
+        LIBS=('emon',),
+        LIBPATH=('$LEMONDIR/lib',),
+        RPATH=('$LEMONDIR/lib',),
+    )
+
+if 'GUROBIDIR' in lenv:
+    lenv.AppendUnique(
+        CPPDEFINES=['USE_GUROBI'],
+        CPPPATH=(
+            '$GUROBIDIR/include',
+        ),
+        GUROBI_SHARED_LIBRARY=lenv.Glob('$GUROBIDIR/lib/libgurobi*.so')[0],
+        LIBS=('gurobi_g++5.2', '$GUROBI_SHARED_LIBRARY.name'),
+        LIBPATH=('$GUROBIDIR/lib',),
+        RPATH=('$GUROBIDIR/lib',),
+    )
+
+if not (lenv.GetOption('help') or lenv.GetOption('clean')):
+    llvm_version = lenv['LLVM_version']
+    if not '3.1' <= llvm_version < '7.0':
+        from SCons import Warnings
+        class LLVMVersionWarning(Warning): pass
+        Warnings.enableWarningClass(LLVMVersionWarning)
+        Warnings.warn(LLVMVersionWarning, 'untested using LLVM %s; recommend LLVM 3.1 through 6.x' % llvm_version)
+    lenv.ParseConfig('$LLVM_CONFIG --cxxflags --ldflags')
+
+    if sconsVersion < (2, 1, 0):
+        for flag in lenv['CFLAGS']:
+            if flag.startswith('-std=c++'):
+                lenv.AppendUnique(CXXFLAGS=flag)
+
+    for envVar in ('CFLAGS', 'CCFLAGS', 'CXXFLAGS'):
+        try:
+            lenv.get(envVar, []).remove('-fno-exceptions')
+            lenv.get(envVar, []).remove('-Wcovered-switch-default')
+        except ValueError:
+            pass
+
+    lenv.PrependUnique(
+        LIBS=('$LLVM_libname',),
+        )
+
+if(lenv.get('CXX_ALT', None)):
+    lenv['CXX'] = env['CXX_ALT']
+
+matchedGcc = {
+    '3.1': '4.9.0',
+    '3.2': '4.9.0',
+    '3.3': '4.9.0',
+    '3.4': '4.8.2',
+    '3.5': '4.8.3',
+    '3.6': '5.1.0',
+    '3.6.2': '4.9.2',
+    '3.7': '5.1.0',
+    '3.7.1': '4.9.2',
+    '3.8': '4.9.2',
+    '3.8.1': '4.9.2',
+    '3.9.1': '4.9.2',
+    '4.0': '4.9.2',
+}.get(str(lenv.get('LLVM_version')))
+
+if matchedGcc:
+    lenv.PrependENVPath('PATH', '/s/gcc-%s/bin' % matchedGcc)
+
+
+# extra files to be included in source distributions
+File('llvm.py')
+map(Glob, (
+    '*.h',
+    '*.hpp',
+    'llvm_proxy/*.h',
+))
+
+
+########################################################################
+
+
+if "GAMSDIR" in lenv:
+  genv = env.Clone(
+      CPPPATH=['$GAMSDIR/apifiles/C++/api', \
+               '$GAMSDIR/apifiles/C/api'
+               ],
+  )
+  genv.AppendUnique(CCFLAGS='-Wno-unused-parameter')
+  
+  GamsAPIDir = genv.Dir('$GAMSDIR/apifiles')
+  GamsCode = File(['C++/api/gamsxco.cpp',
+                   'C++/api/gdxco.cpp',
+                   'C++/api/optco.cpp',
+                   'C/api/gamsxcc.c',
+                   'C/api/gdxcc.c',
+                   'C/api/optcc.c'
+                   ], GamsAPIDir)
+  
+  GamsObjs = [genv.SharedObject(Dir('.').File(src.target_from_source('', '.os').name), src) for src in GamsCode]
+
+sources = [
+    "BBCoverage.cpp",
+    "CFGWriter.cpp",
+    "CallCoverage.cpp",
+    "CoverageOptimization.cpp",
+    "CoverageOptimizationGraph.cpp",
+    "CoveragePass.cpp",
+    "DominatorOptimizationGraph.cpp",
+    "ExtrinsicCalls.cpp",
+    "FuncCoverage.cpp",
+    "InfoFileOption.cpp",
+    "InstrumentationData.cpp",
+    "LocalCoveragePass.cpp",
+    "NaiveCoverageSet.cpp",
+    "NaiveOptimizationGraph.cpp",
+    "OptimizationOption.cpp",
+    "PathNumbering.cpp",
+    "PathTracing.cpp",
+    "PrepareCSI.cpp",
+    "SilentInternalOption.cpp",
+    "Utils.cpp",
+]
+
+if 'GAMSDIR' in lenv:
+    sources += ["GAMSUtils.cpp"] + GamsObjs
+
+if 'LEMONDIR' in lenv and 'GUROBIDIR' in lenv:
+    sources += ["LEMONUtils.cpp", "LEMONCoverageSet.cpp"]
+
+csiInstrumentor, = lenv.SharedLibrary('#Release/CSI', sources)
+
+
+########################################################################
+#
+#  compilation database for use with various Clang LibTooling tools
+#
+
+
+import json
+
+def compilation_database(env, topdir):
+    for obj in csiInstrumentor.sources:
+        src, = obj.sources
+        yield {
+            'directory': topdir,
+            'file': src.path,
+            'command': env.subst('$SHCXXCOM', target=obj, source=src),
+        }
+
+def stash_compile_commands(target, source, env):
+    topdir, sconscripts = source[0], source[1:]
+    target, = target
+    commands = list(compilation_database(env, topdir.read()))
+    json.dump(commands, open(str(target), 'w'), indent=2)
+
+lenv.Command('compile_commands.json', (Value(Dir('#').abspath), '#SConstruct', 'SConscript'), stash_compile_commands)

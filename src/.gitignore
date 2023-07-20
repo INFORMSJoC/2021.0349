@@ -1,0 +1,11 @@
+.sconf_temp
+.scons-cache
+.scons-config
+.sconsign.dblite
+Release
+config.log
+/csi-*.*.*
+/csi-*.*.*.tar.gz
+stamp
+
+**/*.pyc

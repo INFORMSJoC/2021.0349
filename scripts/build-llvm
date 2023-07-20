@@ -1,0 +1,59 @@
+#!/bin/sh -ex
+
+
+########################################################################
+#
+#  download, unpack, and reorganize sources
+#
+
+version=4.0.0
+force_download=false
+
+srcdir="$(pwd)/src"
+
+if [ ! -d "$srcdir" ] || $force_download; then
+  rm -rf "$srcdir"
+
+  fetch() {
+    wget "http://releases.llvm.org/$version/$1-$version.src.tar.xz" 
+    tar xJf $1-$version.src.tar.xz
+    mv "$1-$version.src" "$2"
+  }
+
+  fetch llvm "$srcdir"
+  fetch cfe "$srcdir/tools/clang"
+  fetch compiler-rt "$srcdir/projects/compiler-rt"
+fi
+
+########################################################################
+#
+#  configure and build
+#
+
+sysdir="$(uname -r)"
+mkdir -p "$sysdir"
+cd "$sysdir"
+
+builddir="$(mktemp --directory --tmpdir llvm-build-XXXXXXXX)"
+trap "rm --recursive --force $builddir" EXIT
+
+prefix="$(pwd)/install"
+
+cd "$builddir"
+cmake "$srcdir" \
+      -DCMAKE_CXX_LINK_FLAGS=-Wl,-rpath,/s/gcc-4.9.0/lib \
+      -DCMAKE_BUILD_TYPE=Release \
+      -DCMAKE_INSTALL_PREFIX="$prefix" \
+      -DLLVM_ENABLE_ASSERTIONS=ON \
+      -DLLVM_ENABLE_RTTI=ON \
+      -DLLVM_LINK_LLVM_DYLIB=ON
+make -j"$(nproc)"
+
+
+########################################################################
+#
+#  install
+#
+
+rm --recursive --force "$prefix"
+cmake --build . --target install

@@ -1,106 +1,87 @@
 [![INFORMS Journal on Computing Logo](https://INFORMSJoC.github.io/logos/INFORMS_Journal_on_Computing_Header.jpg)](https://pubsonline.informs.org/journal/ijoc)
 
-# CacheTest
+# A Set Covering Approach to Customized Coverage Instrumentation
 
 This archive is distributed in association with the [INFORMS Journal on
-Computing](https://pubsonline.informs.org/journal/ijoc) under the [MIT License](LICENSE).
+Computing](https://pubsonline.informs.org/journal/ijoc) under the [Apache 2.0 License](LICENSE).
 
-The software and data in this repository are a snapshot of the software and data
-that were used in the research reported on in the paper 
-[This is a Template](https://doi.org/10.1287/ijoc.2019.0000) by T. Ralphs. 
-The snapshot is based on 
-[this SHA](https://github.com/tkralphs/JoCTemplate/commit/f7f30c63adbcb0811e5a133e1def696b74f3ba15) 
-in the development repository. 
+The software and data in this repository are a snapshot of the software and data that were used in the research reported on in the paper [A Set Covering Approach to Customized Coverage Instrumentation](https://doi.org/10.1287/ijoc.2019.0000) by Michini et al. The snapshot is based on [tag v1.4.0](https://github.com/liblit/csi-cc/releases/tag/v1.4.0) in the development repository. 
 
-**Important: This code is being developed on an on-going basis at 
-https://github.com/tkralphs/JoCTemplate. Please go there if you would like to
-get a more recent version or would like support**
+**Important: This code is being developed on an on-going basis at [https://github.com/liblit/csi-cc](https://github.com/liblit/csi-cc). Please go there if you would like to get a more recent version.**
 
 ## Cite
 
 To cite the contents of this repository, please cite both the paper and this repo, using their respective DOIs.
 
-https://doi.org/10.1287/ijoc.2019.0000
+https://doi.org/10.1287/ijoc.2021.0349
 
-https://doi.org/10.1287/ijoc.2019.0000.cd
+https://doi.org/10.1287/ijoc.2019.0349.cd
 
-Below is the BibTex for citing this snapshot of the respoitory.
+Below is the BibTex for citing this snapshot of the repository
 
 ```
-@article{CacheTest,
-  author =        {T. Ralphs},
+@misc{michini.et.al-repo-22,
+  author =        {Carla Michini and Peter Ohmann and Ben Liblit and Jeff Linderoth},
   publisher =     {INFORMS Journal on Computing},
-  title =         {{CacheTest}},
-  year =          {2020},
-  doi =           {10.1287/ijoc.2019.0000.cd},
-  url =           {https://github.com/INFORMSJoC/2019.0000},
+  title =         {{A Set Covering Approach to
+Customized Coverage Instrumentation}},
+  year =          {2022},
+  doi =           {10.1287/ijoc.2021.0349.cd},
+  url =           {https://github.com/INFORMSJoC/2021.0349},
 }  
 ```
 
 ## Description
 
-The goal of this software is to demonstrate the effect of cache optimization.
+This software is an instrumenting compiler for lightweight, customizable control-flow tracing.  The compiler has embedded within it calls to the mixed-integer programming package Gurobi to implement the cutting plane method as described in the paper.
 
 ## Building
 
-In Linux, to build the version that multiplies all elements of a vector by a
-constant (used to obtain the results in [Figure 1](results/mult-test.png) in the
-paper), stepping K elements at a time, execute the following commands.
+This is a large software infrastructure, so building and testing is a somewhat laborious process.
 
-```
-make mult
-```
+First, one needs to build the csi-cc compiler, which is based on the [llvm compiler infrastructure](https://llvm.org/).  To ensure that assertions are active and to get debug/print support, the user will need to build the tools from source using appropriate compiler flags. 
 
-Alternatively, to build the version that sums the elements of a vector (used
-to obtain the results [Figure 2](results/sum-test.png) in the paper), stepping K
-elements at a time, do the following.
 
-```
-make clean
-make sum
-```
+### Building LLVM 
 
-Be sure to make clean before building a different version of the code.
+In the scripts subdirectory, we have provided a "build-llvm" script that downloads and builds clang CFE internals (cfe), the compiler runtime (compiler-rt), and llvm.  
+Just running the command 
+```build-llvm```
+in the scripts/ directory should be sufficient to download and build all necessary software.  If users have these tools already installed on their system, this step may be omitted. 
+
+
+### Building csi-cc
+
+The main program csi-cc uses the [Scons](https://scons.org/) software construction tool for building.
+Building csi-cc with the integer-programming based optimal program instrumentation requires both the LEMON and Gurobi to be installed. 
+Lemon may be obtained from [the Lemon Graph Library Web Site](https://lemon.cs.elte.hu/trac/lemon).  Gurobi is available for academic use from the [Gurobi Academic Program and Licenses page](https://www.gurobi.com/academia/academic-program-and-licenses/).
+
+There are instructions for building and running the csi-cc code in the src/docs directory.  For most users, the command 
+```
+scons LLVM_CONFIG=/path/to/llvm-config LEMONDIR=/path/to/lemon GUROBIDIR=/path/to/gurobi
+```
+should build the compiler, assuming all necessary dependencies are installed.  The compiler will be created in the src/Release directory with the executable/compiler csi-cc and associated library libCSI.so.
+
 
 ## Results
 
-Figure 1 in the paper shows the results of the multiplication test with different
-values of K using `gcc` 7.5 on an Ubuntu Linux box.
+In the data directory, we have placed source code for many of the evaluated C applications. 
 
-![Figure 1](results/mult-test.png)
+Other applications from the paper may be retrieved from the 
+[Software-artifact Infrastructure Repository](https://sir.csc.ncsu.edu/portal/index.php). 
 
-Figure 2 in the paper shows the results of the sum test with different
-values of K using `gcc` 7.5 on an Ubuntu Linux box.
+In the data directory, there is a script run-all.sh that demonstrates how to compile the example codes using the csi-cc compiler instrumented with the integer-programming-based to optimize program coverage.  The sample script makes use of special ijoc-{bb,cc}.schema files (located in the src/schemas directory) that will allow for complete compilation of all the sample programs by 'bypassing' instrumentation of functions that take too long to compile.  The ijoc-bb.schema file is for basic block coverage, while the ijoc-bb.schema is for call site coverage only.  Note that these schema are not the same as used in generating results for the paper.  For the computational results of the paper, program compliation was allowed to time out after 3 hours. 
 
-![Figure 1](results/sum-test.png)
+In order to build bash, the system will require the yacc (bison) parser generator.
 
 ## Replicating
 
-To replicate the results in [Figure 1](results/mult-test), do either
+Replicating all of the results would be an incredibly time-consuming, or depending on runtime environment, an impossible process.  Instead, we have put the raw text files containing results from each run in the results/ directory. 
+The figures can be created by running the scripts in the results directory.  There is a README file in that directory explaining how to generate all figures and tables from the paper.
 
-```
-make mult-test
-```
-or
-```
-python test.py mult
-```
-To replicate the results in [Figure 2](results/sum-test), do either
 
-```
-make sum-test
-```
-or
-```
-python test.py sum
-```
 
 ## Ongoing Development
 
-This code is being developed on an on-going basis at the author's
-[Github site](https://github.com/tkralphs/JoCTemplate).
-
-## Support
-
-For support in using this software, submit an
-[issue](https://github.com/tkralphs/JoCTemplate/issues/new).
+This code is being developed on an on-going basis at 
+[https://github.com/liblit/csi-cc](https://github.com/liblit/csi-cc). Please go there if you would like to get a more recent version of the packages. 
