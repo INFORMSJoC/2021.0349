@@ -5,7 +5,7 @@
 This archive is distributed in association with the [INFORMS Journal on
 Computing](https://pubsonline.informs.org/journal/ijoc) under the [Apache 2.0 License](LICENSE).
 
-The software and data in this repository are a snapshot of the software and data that were used in the research reported on in the paper [A Set Covering Approach to Customized Coverage Instrumentation](https://doi.org/10.1287/ijoc.2019.0000) by Michini et al. The snapshot is based on [tag v1.4.0](https://github.com/liblit/csi-cc/releases/tag/v1.4.0) in the development repository. 
+The software and data in this repository are a snapshot of the software and data that were used in the research reported on in the paper [A Set Covering Approach to Customized Coverage Instrumentation](https://doi.org/10.1287/ijoc.2021.0349) by Michini et al. The snapshot is based on [tag v1.4.0](https://github.com/liblit/csi-cc/releases/tag/v1.4.0) in the development repository. 
 
 **Important: This code is being developed on an on-going basis at [https://github.com/liblit/csi-cc](https://github.com/liblit/csi-cc). Please go there if you would like to get a more recent version.**
 
